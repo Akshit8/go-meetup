@@ -31,6 +31,18 @@ migrate create -ext sql -dir db/migration -seq init
 make migrationup
 ```
 
+## Seeding PG db manually
+```bash
+docker exec -it postgresdb psql -U root -d meetup
+
+INSERT INTO users (username, email) VALUES ('bob', 'bob@gmail.com');
+INSERT INTO users (username, email) VALUES ('jon', 'jon@gmail.com');
+INSERT INTO users (username, email) VALUES ('jane', 'jane@gmail.com');
+
+INSERT INTO meetups (name, description, user_id) VALUES ('My first meetup', 'This is a description', 1);
+INSERT INTO meetups (name, description, user_id) VALUES ('My second meetup', 'This is a description', 1);
+```
+
 ## Makefile specs
 - **git** - git add - commit - push commands
 - **start** - start the application without build
