@@ -10,17 +10,17 @@ type Meetup {
   id: ID!
   name: String!
   description: String!
-
+  
   user: User!
-}
-
-type Query {
-  meetups: [Meetup!]
 }
 
 input NewMeetup {
   name: String!
   description: String!
+}
+
+type Query {
+  meetups: [Meetup!]!
 }
 
 type Mutation {

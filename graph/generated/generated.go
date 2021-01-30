@@ -247,17 +247,17 @@ type Meetup {
   id: ID!
   name: String!
   description: String!
-
+  
   user: User!
-}
-
-type Query {
-  meetups: [Meetup!]
 }
 
 input NewMeetup {
   name: String!
   description: String!
+}
+
+type Query {
+  meetups: [Meetup!]!
 }
 
 type Mutation {
@@ -545,11 +545,14 @@ func (ec *executionContext) _Query_meetups(ctx context.Context, field graphql.Co
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
 	res := resTmp.([]*model.Meetup)
 	fc.Result = res
-	return ec.marshalOMeetup2ᚕᚖgithubᚗcomᚋAkshit8ᚋgoᚑmeetupᚋgraphᚋmodelᚐMeetupᚄ(ctx, field.Selections, res)
+	return ec.marshalNMeetup2ᚕᚖgithubᚗcomᚋAkshit8ᚋgoᚑmeetupᚋgraphᚋmodelᚐMeetupᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -1992,6 +1995,9 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_meetups(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
 				return res
 			})
 		case "__type":
@@ -2671,46 +2677,6 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 		return graphql.Null
 	}
 	return graphql.MarshalBoolean(*v)
-}
-
-func (ec *executionContext) marshalOMeetup2ᚕᚖgithubᚗcomᚋAkshit8ᚋgoᚑmeetupᚋgraphᚋmodelᚐMeetupᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Meetup) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalNMeetup2ᚖgithubᚗcomᚋAkshit8ᚋgoᚑmeetupᚋgraphᚋmodelᚐMeetup(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-	return ret
 }
 
 func (ec *executionContext) unmarshalOString2string(ctx context.Context, v interface{}) (string, error) {

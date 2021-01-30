@@ -12,7 +12,15 @@ import (
 )
 
 func (r *meetupResolver) User(ctx context.Context, obj *model.Meetup) (*model.User, error) {
-	panic(fmt.Errorf("not implemented"))
+	user := &model.User{}
+
+	for _, u := range r.UserStore {
+		if u.ID == obj.UserID {
+			user = u
+			break;
+		}
+	}
+	return user, nil
 }
 
 func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeetup) (*model.Meetup, error) {
@@ -20,11 +28,19 @@ func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeet
 }
 
 func (r *queryResolver) Meetups(ctx context.Context) ([]*model.Meetup, error) {
-	panic(fmt.Errorf("not implemented"))
+	return r.MeetupStore, nil
 }
 
 func (r *userResolver) Meetups(ctx context.Context, obj *model.User) ([]*model.Meetup, error) {
-	panic(fmt.Errorf("not implemented"))
+	var m []*model.Meetup
+
+	for _, meetup := range r.MeetupStore {
+		if meetup.UserID == obj.ID {
+			m = append(m, meetup)
+		}
+	}
+
+	return m, nil
 }
 
 // Meetup returns generated.MeetupResolver implementation.
