@@ -24,7 +24,7 @@ func main() {
 
 	dbConn := db.NewDBConnection(opt)
 	defer dbConn.Close()
-	// dbConn.AddQueryHook(db.Logger{})
+	dbConn.AddQueryHook(db.Logger{})
 
 	newMeetupRepo := db.NewMeetupRepo(dbConn)
 	newUserRepo := db.NewUserRepo(dbConn)

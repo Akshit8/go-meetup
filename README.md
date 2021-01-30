@@ -51,6 +51,7 @@ INSERT INTO meetups (name, description, user_id) VALUES ('My second meetup', 'Th
 - **migrationdown** - rollback db to previous stage
 
 ## References
+[go-pg](https://medium.com/tunaiku-tech/go-pg-golang-postgre-orm-2618b75c0430) <br>
 
 ## Author
 **Akshit Sadana <akshitsadana@gmail.com>**
