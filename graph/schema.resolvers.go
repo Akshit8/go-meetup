@@ -5,42 +5,39 @@ package graph
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"math/rand"
 
 	"github.com/Akshit8/go-meetup/graph/generated"
 	"github.com/Akshit8/go-meetup/graph/model"
 )
 
 func (r *meetupResolver) User(ctx context.Context, obj *model.Meetup) (*model.User, error) {
-	user := &model.User{}
-
-	for _, u := range r.UserStore {
-		if u.ID == obj.UserID {
-			user = u
-			break;
-		}
-	}
-	return user, nil
+	return r.UserStore.GetUserByID(obj.UserID)
 }
 
 func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeetup) (*model.Meetup, error) {
-	panic(fmt.Errorf("not implemented"))
+	if len(input.Name) < 3 {
+		return nil, errors.New("description not long enough")
+	}
+	if len(input.Description) < 10 {
+		return nil, errors.New("description not long enough")
+	}
+	meetup := &model.Meetup{
+		ID: fmt.Sprintf("ID:%d", rand.Int()),
+		Name: input.Name,
+		Description: input.Description,
+	}
+	return r.MeetupStore.CreateMeetup(meetup)
 }
 
 func (r *queryResolver) Meetups(ctx context.Context) ([]*model.Meetup, error) {
-	return r.MeetupStore, nil
+	return r.MeetupStore.GetMeetUps()
 }
 
 func (r *userResolver) Meetups(ctx context.Context, obj *model.User) ([]*model.Meetup, error) {
-	var m []*model.Meetup
-
-	for _, meetup := range r.MeetupStore {
-		if meetup.UserID == obj.ID {
-			m = append(m, meetup)
-		}
-	}
-
-	return m, nil
+	panic("TODO")
 }
 
 // Meetup returns generated.MeetupResolver implementation.
