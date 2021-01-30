@@ -2,6 +2,7 @@ package resolver
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/Akshit8/go-meetup/graph/generated"
 	"github.com/Akshit8/go-meetup/graph/model"
@@ -9,6 +10,10 @@ import (
 
 func (r *queryResolver) Meetups(ctx context.Context) ([]*model.Meetup, error) {
 	return r.MeetupStore.GetMeetUps()
+}
+
+func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
 // Query returns generated.QueryResolver implementation.

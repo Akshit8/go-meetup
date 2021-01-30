@@ -3,6 +3,7 @@ package resolver
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/Akshit8/go-meetup/graph/generated"
 	"github.com/Akshit8/go-meetup/graph/model"
@@ -21,6 +22,14 @@ func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeet
 		UserID:      "1",
 	}
 	return r.MeetupStore.CreateMeetup(meetup)
+}
+
+func (r *mutationResolver) UpdateMeetup(ctx context.Context, id string, input *model.UpdateMeetup) (*model.Meetup, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+func (r *mutationResolver) DeleteMeetup(ctx context.Context, id string) (bool, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
 // Mutation returns generated.MutationResolver implementation.
