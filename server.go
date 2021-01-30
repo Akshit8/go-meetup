@@ -8,6 +8,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/Akshit8/go-meetup/db"
+	"github.com/Akshit8/go-meetup/graph/dataloader"
 	"github.com/Akshit8/go-meetup/graph/generated"
 	"github.com/Akshit8/go-meetup/graph/resolver"
 	"github.com/go-pg/pg/v10"
@@ -29,13 +30,15 @@ func main() {
 	newMeetupRepo := db.NewMeetupRepo(dbConn)
 	newUserRepo := db.NewUserRepo(dbConn)
 
-	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &resolver.Resolver{
+	c := generated.Config{Resolvers: &resolver.Resolver{
 		MeetupStore: newMeetupRepo,
 		UserStore:   newUserRepo,
-	}}))
+	}}
+
+	srv := handler.NewDefaultServer(generated.NewExecutableSchema(c))
 
 	http.Handle("/", playground.Handler("GraphQL playground", "/query"))
-	http.Handle("/query", srv)
+	http.Handle("/query", dataloader.Middleware(dbConn, srv))
 
 	port := os.Getenv("PORT")
 	if port == "" {

@@ -43,6 +43,17 @@ INSERT INTO meetups (name, description, user_id) VALUES ('My first meetup', 'Thi
 INSERT INTO meetups (name, description, user_id) VALUES ('My second meetup', 'This is a description', 1);
 ```
 
+## Optimising N + 1 queries with dataloaders
+- Some GraphQL queries can make hundreds of database queries, often with mostly repeated data.
+- Dataloader is a way to group up all of those concurrent requests, take out any duplicates, and store them in case they are needed later on in request. The dataloader is just that, a request-scoped batching and caching solution popularised by facebook.
+- We’re going to use [dataloaden](https://github.com/vektah/dataloaden) to build our dataloaders.
+```bash
+go get github.com/vektah/dataloaden
+mkdir dataloader
+cd dataloader
+go run github.com/vektah/dataloaden UserLoader string *github.com/Akshit8/go-meetup/graph/model.User
+```
+
 ## Makefile specs
 - **git** - git add - commit - push commands
 - **start** - start the application without build
