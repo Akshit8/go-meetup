@@ -3,7 +3,6 @@ package db
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/go-pg/pg/v10"
 )
@@ -18,7 +17,6 @@ func (d Logger) BeforeQuery(ctx context.Context, q *pg.QueryEvent) (context.Cont
 
 // AfterQuery godoc
 func (d Logger) AfterQuery(ctx context.Context, q *pg.QueryEvent) error {
-	fmt.Println(q.FormattedQuery())
 	return nil
 }
 

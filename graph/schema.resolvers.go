@@ -6,8 +6,6 @@ package graph
 import (
 	"context"
 	"errors"
-	"fmt"
-	"math/rand"
 
 	"github.com/Akshit8/go-meetup/graph/generated"
 	"github.com/Akshit8/go-meetup/graph/model"
@@ -25,9 +23,9 @@ func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeet
 		return nil, errors.New("description not long enough")
 	}
 	meetup := &model.Meetup{
-		ID: fmt.Sprintf("ID:%d", rand.Int()),
-		Name: input.Name,
+		Name:        input.Name,
 		Description: input.Description,
+		UserID:      "1",
 	}
 	return r.MeetupStore.CreateMeetup(meetup)
 }
