@@ -6,7 +6,7 @@ import (
 	"github.com/go-pg/pg/v10"
 )
 
-// MeetupRepo impls meetup storgae
+// MeetupRepo impls meetup storage
 type MeetupRepo struct {
 	DB *pg.DB
 }
@@ -28,8 +28,27 @@ func (mr *MeetupRepo) GetMeetUps() ([]*model.Meetup, error) {
 	return meetups, nil
 }
 
+// GetMeetupForUser returns all meetups for a given user
+func (mr *MeetupRepo) GetMeetupForUser(user *model.User) ([]*model.Meetup, error) {
+	var meetups []*model.Meetup
+	err := mr.DB.Model(&meetups).Where("user_id = ?", user.ID).Select()
+	return meetups, err
+}
+
 // CreateMeetup creates a new meetup in db
 func (mr *MeetupRepo) CreateMeetup(meetup *model.Meetup) (*model.Meetup, error) {
 	_, err := mr.DB.Model(meetup).Insert()
 	return meetup, err
+}
+
+// UpdateMeetup updates an existing meetup
+func (mr *MeetupRepo) UpdateMeetup(meetup *model.Meetup) (*model.Meetup, error) {
+	_, err := mr.DB.Model(meetup).Where("id = ?", meetup.ID).Update()
+	return meetup, err
+}
+
+// DeleteMeetup deletes a meetup
+func (mr *MeetupRepo) DeleteMeetup(meetup *model.Meetup) error {
+	_, err := mr.DB.Model(meetup).Where("id = ?", meetup.ID).Delete()
+	return err
 }

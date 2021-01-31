@@ -31,6 +31,6 @@ type Query {
 
 type Mutation {
   createMeetup(input: NewMeetup!): Meetup!
-  updateMeetup(id: ID!, input: UpdateMeetup): Meetup!
+  updateMeetup(id: ID!, input: UpdateMeetup!): Meetup!
   deleteMeetup(id: ID!): Boolean!
 }

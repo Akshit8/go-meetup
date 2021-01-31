@@ -24,7 +24,7 @@ func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeet
 	return r.MeetupStore.CreateMeetup(meetup)
 }
 
-func (r *mutationResolver) UpdateMeetup(ctx context.Context, id string, input *model.UpdateMeetup) (*model.Meetup, error) {
+func (r *mutationResolver) UpdateMeetup(ctx context.Context, id string, input model.UpdateMeetup) (*model.Meetup, error) {
 	panic(fmt.Errorf("not implemented"))
 }
 
