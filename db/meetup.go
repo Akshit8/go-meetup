@@ -18,6 +18,13 @@ func NewMeetupRepo(db *pg.DB) *MeetupRepo {
 	}
 }
 
+// GetMeetupByID returns a meetup for given id
+func (mr *MeetupRepo) GetMeetupByID(id string) (*model.Meetup, error) {
+	var meetup model.Meetup
+	err := mr.DB.Model(&meetup).Where("id = ?", id).First()
+	return &meetup, err
+}
+
 // GetMeetUps returns all meetups
 func (mr *MeetupRepo) GetMeetUps() ([]*model.Meetup, error) {
 	var meetups []*model.Meetup
