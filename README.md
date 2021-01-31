@@ -58,8 +58,8 @@ go run github.com/vektah/dataloaden UserLoader string *github.com/Akshit8/go-mee
 - **git** - git add - commit - push commands
 - **start** - start the application without build
 - **gen** - generated graphql-go code for graphql SDL
-- **migrationup** - migrate db to new migrations
-- **migrationdown** - rollback db to previous stage
+- **migrationUp** - migrate db to new migrations
+- **migrationDown** - rollback db to previous stage
 
 ## References
 [go-pg](https://medium.com/tunaiku-tech/go-pg-golang-postgre-orm-2618b75c0430) <br>

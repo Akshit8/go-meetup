@@ -9,10 +9,10 @@ gen:
 start:
 	go run server.go
 
-migrationup:
+migrationUp:
 	migrate -path db/migration -database $(DB_SOURCE) -verbose up
 
-migrationdown:
+migrationDown:
 	migrate -path db/migration -database $(DB_SOURCE) -verbose down
 
 .PHONY: git gen start migrationup migrationdown
