@@ -5,13 +5,18 @@ import (
 	"net/http"
 	"os"
 
+	auth "github.com/Akshit8/go-meetup/middleware"
+
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
 	"github.com/Akshit8/go-meetup/db"
 	"github.com/Akshit8/go-meetup/graph/dataloader"
 	"github.com/Akshit8/go-meetup/graph/generated"
 	"github.com/Akshit8/go-meetup/graph/resolver"
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
 	"github.com/go-pg/pg/v10"
+	"github.com/rs/cors"
 )
 
 const defaultPort = "8080"
@@ -29,6 +34,19 @@ func main() {
 
 	newMeetupRepo := db.NewMeetupRepo(dbConn)
 	newUserRepo := db.NewUserRepo(dbConn)
+
+	router := chi.NewRouter()
+
+	router.Use(cors.New(cors.Options{
+		AllowedOrigins:   []string{"http://localhost:8080"},
+		AllowCredentials: true,
+		Debug:            true,
+	}).Handler)
+
+	router.Use(middleware.RequestID)
+	router.Use(middleware.Logger)
+
+	router.Use(auth.AuthMiddleware(newUserRepo))
 
 	c := generated.Config{Resolvers: &resolver.Resolver{
 		MeetupStore: newMeetupRepo,
