@@ -16,7 +16,7 @@ Meetup:
         resolver: true
 ```
 
-## Using Postgres for develpment
+## Using Postgres for development
 CockroachDB supports the PostgreSQL wire protocol, so available PostgreSQL client drivers and ORMs mostly work with CockroachDB. So for development we'll use postgres and we can later connect to cockroachDB cluster for production.
 ```bash
 # setting postgres container
