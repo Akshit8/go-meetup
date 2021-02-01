@@ -9,6 +9,10 @@ import (
 	"github.com/Akshit8/go-meetup/graph/model"
 )
 
+func (r *mutationResolver) Register(ctx context.Context, input model.RegisterInput) (*model.AuthResponse, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
 func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeetup) (*model.Meetup, error) {
 	if len(input.Name) < 3 {
 		return nil, errors.New("description not long enough")
