@@ -8,7 +8,7 @@ import (
 )
 
 func (r *userResolver) Meetups(ctx context.Context, obj *model.User) ([]*model.Meetup, error) {
-	panic("TODO")
+	return r.MeetupStore.GetMeetupForUser(obj)
 }
 
 // User returns generated.UserResolver implementation.

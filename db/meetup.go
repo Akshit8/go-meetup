@@ -50,7 +50,7 @@ func (mr *MeetupRepo) GetMeetUps(filter *model.MeetupFilter, limit, offset *int)
 // GetMeetupForUser returns all meetups for a given user
 func (mr *MeetupRepo) GetMeetupForUser(user *model.User) ([]*model.Meetup, error) {
 	var meetups []*model.Meetup
-	err := mr.DB.Model(&meetups).Where("user_id = ?", user.ID).Select()
+	err := mr.DB.Model(&meetups).Order("id").Where("user_id = ?", user.ID).Select()
 	return meetups, err
 }
 
