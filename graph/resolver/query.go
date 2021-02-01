@@ -7,8 +7,8 @@ import (
 	"github.com/Akshit8/go-meetup/graph/model"
 )
 
-func (r *queryResolver) Meetups(ctx context.Context) ([]*model.Meetup, error) {
-	return r.MeetupStore.GetMeetUps()
+func (r *queryResolver) Meetups(ctx context.Context, filter *model.MeetupFilter, limit *int, offset *int) ([]*model.Meetup, error) {
+	return r.MeetupStore.GetMeetUps(filter, limit, offset)
 }
 
 func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {

@@ -2,6 +2,8 @@
 package db
 
 import (
+	"fmt"
+
 	"github.com/Akshit8/go-meetup/graph/model"
 	"github.com/go-pg/pg/v10"
 )
@@ -26,9 +28,19 @@ func (mr *MeetupRepo) GetMeetupByID(id string) (*model.Meetup, error) {
 }
 
 // GetMeetUps returns all meetups
-func (mr *MeetupRepo) GetMeetUps() ([]*model.Meetup, error) {
+func (mr *MeetupRepo) GetMeetUps(filter *model.MeetupFilter, limit, offset *int) ([]*model.Meetup, error) {
 	var meetups []*model.Meetup
-	err := mr.DB.Model(&meetups).Select()
+	query := mr.DB.Model(&meetups).Order("id")
+
+	if filter != nil {
+		if filter.Name != nil && *filter.Name != "" {
+			query.Where("name LIKE ?", fmt.Sprintf("%%%s%%", *filter.Name))
+		}
+	}
+	query.Limit(*limit)
+	query.Offset(*offset)
+	err := query.Select()
+
 	if err != nil {
 		return nil, err
 	}
