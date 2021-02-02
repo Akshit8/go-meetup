@@ -4,13 +4,52 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"log"
 
 	"github.com/Akshit8/go-meetup/graph/generated"
 	"github.com/Akshit8/go-meetup/graph/model"
 )
 
 func (r *mutationResolver) Register(ctx context.Context, input model.RegisterInput) (*model.AuthResponse, error) {
-	panic(fmt.Errorf("not implemented"))
+	_, err := r.UserStore.GetUserByUserEmail(input.Email)
+	if err != nil {
+		return nil, errors.New("email already used")
+	}
+	_, err = r.UserStore.GetUserByUserName(input.Username)
+	if err != nil {
+		return nil, errors.New("username already used")
+	}
+
+	user := &model.User{
+		Username:  input.Username,
+		Email:     input.Email,
+		FirstName: input.FirstName,
+		LastName:  input.LastName,
+	}
+
+	err = user.HashPassword(input.Password)
+	if err != nil {
+		log.Printf("error while hashing password: %v", err)
+		return nil, errors.New("internal server error")
+	}
+
+	// TODO: Impl transaction
+	_, err = r.UserStore.CreateUser(user)
+	if err != nil {
+		log.Printf("error creating user: %v", err)
+		return nil, err
+	}
+
+	token, err := user.GenerateToken()
+	if err != nil {
+		log.Printf("error generating token: %v", err)
+		return nil, errors.New("internal server error")
+	}
+
+	return &model.AuthResponse{
+		AuthToken: token,
+		User:      user,
+	}, nil
 }
 
 func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeetup) (*model.Meetup, error) {
