@@ -4,19 +4,26 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	auth "github.com/Akshit8/go-meetup/middleware"
 	"log"
 
 	"github.com/Akshit8/go-meetup/graph/generated"
 	"github.com/Akshit8/go-meetup/graph/model"
 )
 
+func (r *mutationResolver) Login(ctx context.Context, input model.LoginInput) (*model.AuthResponse, error) {
+	panic(fmt.Errorf("not implemented"))
+}
 func (r *mutationResolver) Register(ctx context.Context, input model.RegisterInput) (*model.AuthResponse, error) {
-	_, err := r.UserStore.GetUserByUserEmail(input.Email)
-	if err != nil {
+	u, err := r.UserStore.GetUserByUserEmail(input.Email)
+	log.Printf("user: %v", u)
+	log.Printf("error: %v", err)
+	if err == nil {
 		return nil, errors.New("email already used")
 	}
+
 	_, err = r.UserStore.GetUserByUserName(input.Username)
-	if err != nil {
+	if err == nil {
 		return nil, errors.New("username already used")
 	}
 
@@ -53,6 +60,10 @@ func (r *mutationResolver) Register(ctx context.Context, input model.RegisterInp
 }
 
 func (r *mutationResolver) CreateMeetup(ctx context.Context, input model.NewMeetup) (*model.Meetup, error) {
+	currentUser, err := auth.GetCurrentUserFromCTX(ctx)
+	if err != nil {
+		return nil,
+	}
 	if len(input.Name) < 3 {
 		return nil, errors.New("description not long enough")
 	}
