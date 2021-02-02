@@ -1,8 +1,6 @@
 package resolver
 
-import (
-	"github.com/Akshit8/go-meetup/db"
-)
+import "github.com/Akshit8/go-meetup/domain"
 
 // This file will not be regenerated automatically.
 //
@@ -10,6 +8,5 @@ import (
 
 // Resolver godoc
 type Resolver struct {
-	MeetupStore *db.MeetupRepo
-	UserStore   *db.UserRepo
+	Domain *domain.Domain
 }

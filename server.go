@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/Akshit8/go-meetup/domain"
+
 	auth "github.com/Akshit8/go-meetup/middleware"
 
 	"github.com/99designs/gqlgen/graphql/handler"
@@ -48,10 +50,9 @@ func main() {
 
 	router.Use(auth.AuthMiddleware(newUserRepo))
 
-	c := generated.Config{Resolvers: &resolver.Resolver{
-		MeetupStore: newMeetupRepo,
-		UserStore:   newUserRepo,
-	}}
+	d := domain.NewDomain(newUserRepo, newMeetupRepo)
+
+	c := generated.Config{Resolvers: &resolver.Resolver{Domain: d}}
 
 	srv := handler.NewDefaultServer(generated.NewExecutableSchema(c))
 

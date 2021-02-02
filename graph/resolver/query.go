@@ -8,11 +8,11 @@ import (
 )
 
 func (r *queryResolver) Meetups(ctx context.Context, filter *model.MeetupFilter, limit *int, offset *int) ([]*model.Meetup, error) {
-	return r.MeetupStore.GetMeetUps(filter, limit, offset)
+	return r.Domain.MeetupStore.GetMeetUps(filter, limit, offset)
 }
 
 func (r *queryResolver) User(ctx context.Context, id string) (*model.User, error) {
-	return r.UserStore.GetUserByID(id)
+	return r.Domain.UserStore.GetUserByID(id)
 }
 
 // Query returns generated.QueryResolver implementation.

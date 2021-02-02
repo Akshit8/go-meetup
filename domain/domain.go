@@ -14,11 +14,11 @@ var (
 )
 
 type Domain struct {
-	UserStore   db.UserRepo
-	MeetupStore db.MeetupRepo
+	UserStore   *db.UserRepo
+	MeetupStore *db.MeetupRepo
 }
 
-func NewDomain(userStore db.UserRepo, meetupStore db.MeetupRepo) *Domain {
+func NewDomain(userStore *db.UserRepo, meetupStore *db.MeetupRepo) *Domain {
 	return &Domain{UserStore: userStore, MeetupStore: meetupStore}
 }
 
